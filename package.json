@@ -1,0 +1,16 @@
+{
+  "name": "image-cache-service",
+  "version": "1.0.0",
+  "description": "Provides a webservice for caching images",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "md5": "^2.2.1",
+    "request": "^2.88.0"
+  }
+}
