@@ -15,16 +15,21 @@ var download = function(uri, filename, callback) {
     })
 };
 
-var buildImagePath = function(uri, filename) {
-    return cachePrefix + filename + path.extname(uri);
+var buildImagePath = function(uri, filename, minified) {
+    var pathName = minified ? cachePrefix + 'minified/' + filename : cachePrefix + 'queue/' + filename;
+    return pathName + path.extname(uri);
 };
 
 
 app.get('/image', function(req, res) {
     var imageHash = md5(req.query.url);
-    var filename = buildImagePath(req.query.url, imageHash);
-    if(fs.existsSync(filename)) {
-        console.log('Image already known, serving from cache.');
+    var filename = buildImagePath(req.query.url, imageHash, false);
+    var minifiedFilename = buildImagePath(req.query.url, imageHash, true);
+    if(fs.existsSync(minifiedFilename)) {
+        console.log('Image already known and minified, serving from cache.');
+        res.sendFile(minifiedFilename);
+    }else if(fs.existsSync(filename))  {
+        console.log('Image already known but not yet minified, serving from cache.');
         res.sendFile(filename);
     }else {
         console.log('Unknown image url, downloading and caching.');
@@ -35,6 +40,6 @@ app.get('/image', function(req, res) {
     }
 });
 
-app.listen(3000, function() {
-    console.log("Image Caching Service listening on port 3000");
+app.listen(3111, function() {
+    console.log("Image Caching Service listening on port 3111");
 });
